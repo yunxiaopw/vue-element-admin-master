@@ -11,6 +11,7 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
+import { TokenKey } from '@/utils/auth'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -40,6 +41,47 @@ import nestedRouter from './modules/nested'
  */
 export const constantRoutes = [
   {
+    path: '/',
+    component: Layout,
+    redirect: '/home',
+    meta: {
+      title: 'Components',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: 'home',
+        name: '/home/',
+        component: () => import('@/views/home/home.vue'),
+        meta: { title: '驾驶舱', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/data',
+    component: Layout,
+    redirect: '/data/',
+    meta: {
+      title: '数据统计',
+      icon: 'documentation'
+    },
+    children: [
+      {
+        path: 'report-person',
+        component: () => import('@/views/report-person/reportPerson.vue'),
+        name: '/ReportPerson/',
+        meta: { title: '劳务考勤' }
+      },
+      {
+        path: 'report-mechanices',
+        component: () => import('@/views/report-mechanices/reportMechanices.vue'),
+        name: '/ReportMechanices/',
+        meta: { title: '机械台班' }
+      }
+    ]
+  },
+
+  {
     path: '/redirect',
     component: Layout,
     hidden: true,
@@ -52,6 +94,7 @@ export const constantRoutes = [
   },
   {
     path: '/login',
+    name: 'Login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
@@ -71,7 +114,7 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/',
+    path: '/dashboard',
     component: Layout,
     redirect: '/dashboard',
     children: [
@@ -400,5 +443,27 @@ export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
+
+// 导航守卫
+const whiteList = ['Login']
+
+router.beforeEach((to, from, next) => {
+  // 在外面引入导致持久化失效
+  const token = localStorage.getItem(TokenKey)
+
+  if (!token) {
+    // 要防止死循环
+    if (whiteList.includes(to.name)) {
+      next()
+    } else {
+      next({
+        name: 'Login',
+        query: { redirect: to.fullPath }
+      })
+    }
+  } else {
+    next()
+  }
+})
 
 export default router

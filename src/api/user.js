@@ -1,24 +1,16 @@
-import request from '@/utils/request'
+import { post, del } from '@/utils/request'
 
-export function login(data) {
-  return request({
-    url: '/vue-element-admin/user/login',
-    method: 'post',
-    data
-  })
+/**
+ * @param {string} username
+*  @param {string} password
+ * @returns
+ */
+export const apiLogin = (params) => {
+  return post('/API/Login', params)
 }
 
-export function getInfo(token) {
-  return request({
-    url: '/vue-element-admin/user/info',
-    method: 'get',
-    params: { token }
-  })
+// 退出登录
+export function apiLogout() {
+  return del('/API/Login')
 }
 
-export function logout() {
-  return request({
-    url: '/vue-element-admin/user/logout',
-    method: 'post'
-  })
-}

@@ -1,15 +1,18 @@
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 
-const TokenKey = 'Admin-Token'
+export const TokenKey = 'Access-Token'
 
+// 获取本地缓存token
 export function getToken() {
-  return Cookies.get(TokenKey)
+  return localStorage.getItem(TokenKey)
 }
 
+// 设置本地缓存token
 export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+  return localStorage.setItem(TokenKey, token)
 }
 
+// 清除本地缓存token
 export function removeToken() {
-  return Cookies.remove(TokenKey)
+  return localStorage.removeItem(TokenKey)
 }

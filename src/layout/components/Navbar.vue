@@ -28,7 +28,7 @@
             <el-dropdown-item>Profile</el-dropdown-item>
           </router-link>
           <router-link to="/">
-            <el-dropdown-item>Dashboard</el-dropdown-item>
+            <el-dropdown-item>Dashboard11</el-dropdown-item>
           </router-link>
           <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>Github</el-dropdown-item>
@@ -75,8 +75,10 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      const res = await this.$store.dispatch('user/logout')
+      if (res) {
+        this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      }
     }
   }
 }
